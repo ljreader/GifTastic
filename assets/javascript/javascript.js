@@ -4,10 +4,11 @@ $(function(){
 })
 
 //---Array---//
-var searchArray = ['Soccer Dance','Angry Coach','Archery Trick Shot','Hiking fails'];
+var searchArray = ['Soccer Dance','Angry Coach','Archery Trick Shot','Hiking fails','Little Boys',
+'Homework', 'Computers','Redhead Wife Hot','Mini Van']
 
 
-
+//---function---//
 function populateButtons(searchArray,classToAdd,areaToAddTo){
   $(areaToAddTo).empty();
   // for loop//
@@ -63,7 +64,6 @@ $(document).on('click','.searchImage',function(){
     //---freeze state---//
     $(this).attr('src',$(this).data('still'));
     $(this).attr('data-state','still');
-      return false;
 
   }
  });
