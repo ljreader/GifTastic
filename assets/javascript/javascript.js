@@ -3,10 +3,14 @@ $(function(){
   console.log("page Loaded");
 })
 
-var searchArray = ['Dog','Cat','Bird'];
+//---Array---//
+var searchArray = ['Soccer Dance','Angry Coach','Archery Trick Shot','Hiking fails'];
+
+
 
 function populateButtons(searchArray,classToAdd,areaToAddTo){
   $(areaToAddTo).empty();
+  // for loop//
   for(var i=0; i<searchArray.length; i++){
     var a = $('<button>');
     a.addClass(classToAdd);
@@ -15,42 +19,63 @@ function populateButtons(searchArray,classToAdd,areaToAddTo){
     $(areaToAddTo).append(a);
   }
 }
-
+//------create butons based on the screen and make sure they work--//
 $(document).on('click','.searchButton', function(){
+  $('#searches').empty();
   var type = $(this).data('type');
-  var queryURL = 'http://api.giphy.com/v1/gifs/search?q='+type+'&api_key=dc'zaT0xFJmz
+  var queryURL = 'http://api.giphy.com/v1/gifs/search?q='+type+'&api_key=XUi1GkVQ6LH8rtFgfBfrB61BGXham062&limit=25&rating=G&rating=PG'
   $.ajax({url:queryURL,method:'GET'})
     .done(function(response){
-      for(var i-0; i<response.data.length; i++)
-      {
+      for(var i=0;i<response.data.length;i++){
         var searchDiv = $('<div class="search-item">');
         var rating = response.data[i].rating;
-        var p = $('<P>').text('rating: ' + rating);
+        var p = $('<P>').text('rating: '+rating);
+        // look at "Images: Object in console"
+        var still = response.data[i].images.fixed_height.url;
         var animated = response.data[i].images.fixed_height_still.url;
         var image = $('<img>');
+          // Alter Images//
+          // Still images//
+          image.attr('src',still);
+          image.attr('data-still',still);
+          // animated//
+          image.attr('data-animated',animated);
+          // reference 'still' string//
+          image.attr('data-state','still');
+          image.addClass('searchImage');
+          // rating//
+          searchDiv.append(p);
+          //image//
+          searchDiv.append(image);
+          $('#searches').append(searchDiv);
 
-        image.attr('src',still);
-        image.attr('data-still', 'still');
-        image.attr('data-animated',animated);
-        image.addClass('data-state', 'still');
-        searchDiv.append(p);
-        searchDiv.append(image);
-        $('#searches').append(searchDiv);
       }
     })
 })
-
-$(document).on('click','.searchImage',function () {
+//---Animation please!---//
+$(document).on('click','.searchImage',function(){
   var state = $(this).data('state');
   if(state == 'still'){
+    //---animate---//
     $(this).attr('src',$(this).data('animated'));
+    $(this).attr('data-state','animated');
+  } else {
+    //---freeze state---//
+    $(this).attr('src',$(this).data('still'));
     $(this).attr('data-state','still');
+      return false;
+
   }
-})
+ });
+
+//-- make a way to add new giff's and their buttons--//
 
 $('#addSearch').on('click',function(){
   var newSearch = $('input').eq(0).val();
   searchArray.push(newSearch);
-  PopulateButtons(searchArray,'searchButton','#buttonsarea');
+  populateButtons(searchArray,'searchButton','buttonsArea');
+  //---RETURN FALSE TO STOP RELOADING PAGE!!!!!!!!---//
+  //---Place below animations---//
   return false;
 })
+//---Done?---//
